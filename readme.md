@@ -47,3 +47,33 @@ function useInfiniteScroll(callback) {
 }
 ```
 **Why it matters:** useFetch gives clean loading/error UI, and useInfiniteScroll reuses it for pagination - zero libraries needed
+
+# FORM HANDLING
+Every form needs value tracking, validation and submit logic - write it once, use it everywhere.
+
+```js
+// useForm - values, validation, submit
+function useForm(initial, validate) {
+  const [values, setValues] = useState(initial);
+  const [errors, setErrors] = useState({});
+  const handleChange = (e) =>
+    setValues(v => ({ ...v, [e.target.name]: e.target.value }));
+  const handleSubmit = (onSubmit) => (e) => {
+    e.preventDefault();
+    const errs = validate(values);
+    setErrors(errs);
+    if (!Object.keys(errs).length) onSubmit(values);
+  };
+  return { values, errors, handleChange, handleSubmit };
+}
+```
+
+```js
+// useInput - single field state + onChange
+function useInput(initial = "") {
+  const [value, setValue] = useState(initial);
+  const onChange = (e) => setValue(e.target.value);
+  return {value, onChange}
+}
+```
+**Why it matters:** useForm scales to multi-field forms; useInput is the lightweight version for single search box or filter.
