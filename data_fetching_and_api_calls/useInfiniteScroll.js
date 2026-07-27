@@ -1,5 +1,3 @@
-const { useEffect } = require("react");
-
 // useInfiniteScroll - load more near bottom
 function useInfiniteScroll(callback) {
   useEffect(() => {
