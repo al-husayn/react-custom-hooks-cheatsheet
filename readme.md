@@ -1,6 +1,6 @@
 # REACT'S CUSTOM HOOKS CHEATSHEET/USECASES
 
-## 9 real world categories  devs actually reuse in production with working code, explained simply.
+## 9 real world categories devs actually reuse in production with working code, explained simply.
 
 1. Data Fetching / API calls
 2. Form Handling
@@ -12,10 +12,11 @@
 8. Timers / Intervals
 9. Third-Party Integration
 
-
 # DATA FETCHING & API CALLS
+
 Anytime you call an API or load a long list, these two hooks cover almost every real case.
-```js 
+
+```js
 const { useState, useEffect } = require("react");
 
 // useFetch - GET/POST + loading/error state
@@ -23,7 +24,8 @@ function useFetch(url) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch(url).then(res => res.json())
+    fetch(url)
+      .then((res) => res.json())
       .then(setData)
       .finally(() => setLoading(false));
   }, [url]);
@@ -42,13 +44,15 @@ function useInfiniteScroll(callback) {
       if (bottom) callback();
     };
     addEventListener("scroll", onScroll);
-    return ()=> removeEventListener("scroll", onScroll)
-  }, [callback])
+    return () => removeEventListener("scroll", onScroll);
+  }, [callback]);
 }
 ```
+
 **Why it matters:** useFetch gives clean loading/error UI, and useInfiniteScroll reuses it for pagination - zero libraries needed
 
 # FORM HANDLING
+
 Every form needs value tracking, validation and submit logic - write it once, use it everywhere.
 
 ```js
@@ -57,7 +61,7 @@ function useForm(initial, validate) {
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState({});
   const handleChange = (e) =>
-    setValues(v => ({ ...v, [e.target.name]: e.target.value }));
+    setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
   const handleSubmit = (onSubmit) => (e) => {
     e.preventDefault();
     const errs = validate(values);
@@ -73,12 +77,14 @@ function useForm(initial, validate) {
 function useInput(initial = "") {
   const [value, setValue] = useState(initial);
   const onChange = (e) => setValue(e.target.value);
-  return {value, onChange}
+  return { value, onChange };
 }
 ```
+
 **Why it matters:** useForm scales to multi-field forms; useInput is the lightweight version for single search box or filter.
 
 ## BROWSER & DEVICE INTERACTION
+
 Responsive UI and connection-aware apps start with these three (3) hooks.
 
 ```js
@@ -88,8 +94,7 @@ function useWindowSize() {
   useEffect(() => {
     const onResize = () => setSize([innerWidth, innerHeight]);
     addEventListener("resize", onResize);
-    
-  }, [])
+  }, []);
   return size;
 }
 
@@ -101,7 +106,7 @@ function useMediaQuery(q) {
     matchMedia(q).addEventListener("change", onChange);
     return () => matchMedia(q).removeEventListener("change", onChange);
   }, [q]);
-  return matches
+  return matches;
 }
 
 // useOnLineStatus -  detect connection drops
@@ -111,9 +116,9 @@ function useOnLineStatus() {
     const sync = setOnline(navigator.onLine);
     addEventListener("online", sync);
     addEventListener("offline", sync);
-  }, [])
+  }, []);
   return online;
 }
-
 ```
+
 **Why it matters:** Combine all three (3) for responsive layouts that also warn users when they go offline.

@@ -5,6 +5,6 @@ function useOnLineStatus() {
     const sync = setOnline(navigator.onLine);
     addEventListener("online", sync);
     addEventListener("offline", sync);
-  }, [])
+  }, []);
   return online;
 }

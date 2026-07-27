@@ -3,7 +3,7 @@ function useForm(initial, validate) {
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState({});
   const handleChange = (e) =>
-    setValues(v => ({ ...v, [e.target.name]: e.target.value }));
+    setValues((v) => ({ ...v, [e.target.name]: e.target.value }));
   const handleSubmit = (onSubmit) => (e) => {
     e.preventDefault();
     const errs = validate(values);

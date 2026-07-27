@@ -4,7 +4,6 @@ function useWindowSize() {
   useEffect(() => {
     const onResize = () => setSize([innerWidth, innerHeight]);
     addEventListener("resize", onResize);
-    
-  }, [])
+  }, []);
   return size;
 }

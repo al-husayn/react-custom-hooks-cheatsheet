@@ -6,5 +6,5 @@ function useMediaQuery(q) {
     matchMedia(q).addEventListener("change", onChange);
     return () => matchMedia(q).removeEventListener("change", onChange);
   }, [q]);
-  return matches
+  return matches;
 }

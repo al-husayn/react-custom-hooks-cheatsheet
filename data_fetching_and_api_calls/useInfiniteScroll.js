@@ -6,6 +6,6 @@ function useInfiniteScroll(callback) {
       if (bottom) callback();
     };
     addEventListener("scroll", onScroll);
-    return ()=> removeEventListener("scroll", onScroll)
-  }, [callback])
+    return () => removeEventListener("scroll", onScroll);
+  }, [callback]);
 }
