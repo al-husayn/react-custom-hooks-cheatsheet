@@ -80,3 +80,40 @@ function useInput(initial = "") {
 
 ## BROWSER & DEVICE INTERACTION
 Responsive UI and connection-aware apps start with these three (3) hooks.
+
+```js
+// useWindowSize -  viewport width & height
+function useWindowSize() {
+  const [size, setSize] = useState([innerWidth, innerHeight]);
+  useEffect(() => {
+    const onResize = () => setSize([innerWidth, innerHeight]);
+    addEventListener("resize", onResize);
+    
+  }, [])
+  return size;
+}
+
+//  useMediaQuery - check css breakpoint
+function useMediaQuery(q) {
+  const [matches, setMatches] = useState(() => matchMedia(q).matches);
+  useEffect(() => {
+    const onChange = (e) => setMatches(e.matches);
+    matchMedia(q).addEventListener("change", onChange);
+    return () => matchMedia(q).removeEventListener("change", onChange);
+  }, [q]);
+  return matches
+}
+
+// useOnLineStatus -  detect connection drops
+function useOnLineStatus() {
+  const [online, setOnline] = useState(navigator.onLine);
+  useEffect(() => {
+    const sync = setOnline(navigator.onLine);
+    addEventListener("online", sync);
+    addEventListener("offline", sync);
+  }, [])
+  return online;
+}
+
+```
+**Why it matters:** Combibe all three (3) for responsive layouts that also warn users when they go offline.
