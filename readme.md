@@ -12,7 +12,7 @@
 8. Timers / Intervals
 9. Third-Party Integration
 
-# DATA FETCHING & API CALLS
+## DATA FETCHING & API CALLS
 
 Anytime you call an API or load a long list, these two hooks cover almost every real case.
 
@@ -51,7 +51,7 @@ function useInfiniteScroll(callback) {
 
 **Why it matters:** useFetch gives clean loading/error UI, and useInfiniteScroll reuses it for pagination - zero libraries needed
 
-# FORM HANDLING
+## FORM HANDLING
 
 Every form needs value tracking, validation and submit logic - write it once, use it everywhere.
 
@@ -122,3 +122,5 @@ function useOnLineStatus() {
 ```
 
 **Why it matters:** Combine all three (3) for responsive layouts that also warn users when they go offline.
+
+
