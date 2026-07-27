@@ -77,3 +77,6 @@ function useInput(initial = "") {
 }
 ```
 **Why it matters:** useForm scales to multi-field forms; useInput is the lightweight version for single search box or filter.
+
+## BROWSER & DEVICE INTERACTION
+Responsive UI and connection-aware apps start with these three (3) hooks.
