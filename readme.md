@@ -124,4 +124,33 @@ function useOnLineStatus() {
 **Why it matters:** Combine all three (3) for responsive layouts that also warn users when they go offline.
 
 ## STORAGE & PERSISTENCE
+
 Theme, auth tokens and temporary form data - persisted the right way, without SSR crashes.
+
+```js
+// useLocalStorage - persists accross sessions
+function useLocalStorage(key, initial) {
+  const [value, setValue] = useState(() => {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : initial;
+  });
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
+}
+
+//  useSessionStorage - cleared when tabs closes
+function useSessionStorage(key, initial) {
+  const [value, setValue] = useState(() => {
+    const saved = sessionStorage.getItem(key);
+    return saved ? JSON.parse(saved) : initial;
+  });
+  useEffect(() => {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
+}
+```
+
+**Why it matters:** the lazy initializer avoids reading storage on every render - a detail most tutorials skip.
