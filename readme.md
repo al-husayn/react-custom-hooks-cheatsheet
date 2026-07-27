@@ -116,4 +116,4 @@ function useOnLineStatus() {
 }
 
 ```
-**Why it matters:** Combibe all three (3) for responsive layouts that also warn users when they go offline.
+**Why it matters:** Combine all three (3) for responsive layouts that also warn users when they go offline.
