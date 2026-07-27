@@ -123,4 +123,5 @@ function useOnLineStatus() {
 
 **Why it matters:** Combine all three (3) for responsive layouts that also warn users when they go offline.
 
-
+## STORAGE & PERSISTENCE
+Theme, auth tokens and temporary form data - persisted the right way, without SSR crashes.
