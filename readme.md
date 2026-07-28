@@ -154,3 +154,6 @@ function useSessionStorage(key, initial) {
 ```
 
 **Why it matters:** the lazy initializer avoids reading storage on every render - a detail most tutorials skip.
+
+## PERFORMANCE & OPTIMIZATION
+Search bars and scroll handlers fire constantly - these two hooks keep them from wrecking performance.
