@@ -184,3 +184,6 @@ function useThrottle(callback, limit = 300) {
 ```
 
 **Why it matters:** debounce = wait until typing stops (search input); throttle = run at most once per N ms (scroll/resize).
+
+## UI STATE MANAGEMENT
+Modals, dropdowns, accordions, and hover effects all reduce to the same three tiny patterns.
