@@ -221,3 +221,25 @@ function useHover() {
 **Why it matters:** useDisclosure beats useToggle for modals since it names both actions explicitly.
 
 ## AUTH & USER-RELATED
+Logged-in state and role checks should live in one hook, not scattered accross components.
+
+```js
+// useAuth - read auth context (login/logout)
+function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth needs AuthProvider");
+  return ctx; // {user, login, logout }
+}
+
+//  usePermissions - role based access check
+function usePermissions(required = []) {
+  const { user } = useAuth();
+  return useMemo(() => {
+    if (!user) return false;
+    return required.every(p => user.permissions.include(p))
+  }, [user, required]);
+}
+
+```
+
+**Why it matters:** usePermissions is memoized so role checks don't rerun on every render.
