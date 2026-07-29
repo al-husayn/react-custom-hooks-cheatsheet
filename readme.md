@@ -218,4 +218,6 @@ function useHover() {
   return [ref, hovered];
 }
 ```
-**Why it matters:** useDisclosure beats useToggle for modals since it names both actions explicitly
+**Why it matters:** useDisclosure beats useToggle for modals since it names both actions explicitly.
+
+## AUTH & USER-RELATED
