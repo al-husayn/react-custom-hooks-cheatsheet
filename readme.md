@@ -187,3 +187,35 @@ function useThrottle(callback, limit = 300) {
 
 ## UI STATE MANAGEMENT
 Modals, dropdowns, accordions, and hover effects all reduce to the same three tiny patterns.
+
+```js
+// useToggle - flip a boolean state
+function useToggle(initial = false) {
+  const [state, setState] = useState(initial);
+  return [state, () => setState((s) => !s)];
+}
+
+// useDisclosure - explicit open/close (modals)
+function useDisclosure() {
+  const [isOpen, setIsOpen] = useState(false);
+  return {
+    isOpen,
+    onOpen: () => setIsOpen(true),
+    onClose: () => setIsOpen(false),
+  };
+}
+
+// useHover - Track hover state on a ref.
+function useHover() {
+  const ref = useRef(null);
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.addEventListener("mouseenter", () => setHovered(true));
+    el.addEventListener("mouseleave", () => setHovered(false));
+  }, []);
+  return [ref, hovered];
+}
+```
+**Why it matters:** useDisclosure beats useToggle for modals since it names both actions explicitly
