@@ -156,4 +156,31 @@ function useSessionStorage(key, initial) {
 **Why it matters:** the lazy initializer avoids reading storage on every render - a detail most tutorials skip.
 
 ## PERFORMANCE & OPTIMIZATION
+
 Search bars and scroll handlers fire constantly - these two hooks keep them from wrecking performance.
+
+```js
+// useDebounce  - waiting for typing to stop
+function useDebounce(value, delay = 400) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
+}
+
+//  useThrottle - limit calls to once per interval
+function useThrottle(callback, limit = 300) {
+  const lastRun = useRef(0);
+  return (...args) => {
+    const now = Date.now();
+    if (now - lastRun.current >= limit) {
+      lastRun.current = now;
+      callback(...args);
+    }
+  };
+}
+```
+
+**Why it matters:** debounce = wait until typing stops (search input); throttle = run at most once per N ms (scroll/resize).
