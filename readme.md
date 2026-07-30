@@ -270,3 +270,6 @@ function useTimeout(callback, delay) {
 }
 ```
 **Why it matters:** Storing the callback in a ref fixes the classic bug of setInterval calling a stale, outdated function.
+
+## THIRD-PARTY INTEGRATION
+Location access and copy-to-clipboard both need the same shape: async browser API + status state.
