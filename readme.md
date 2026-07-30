@@ -243,3 +243,6 @@ function usePermissions(required = []) {
 ```
 
 **Why it matters:** usePermissions is memoized so role checks don't rerun on every render.
+
+## TIMERS & INTERVALS
+Countdown timers and auto fresh features need one thing plain setInterval dosn't give you: always using the latest callback.
