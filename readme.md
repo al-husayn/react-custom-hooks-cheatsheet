@@ -273,3 +273,30 @@ function useTimeout(callback, delay) {
 
 ## THIRD-PARTY INTEGRATION
 Location access and copy-to-clipboard both need the same shape: async browser API + status state.
+
+```js 
+// useGeolocation - user's current position.
+function useGeolocation() {
+  const [pos, setPos] = useState(null);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (p) => setPos(p.coords),
+      (err) => setError(err.message)
+    );
+  }, []);
+  return { pos, error };
+}
+
+// useClipboard - copy text, show confirmation
+function useClipboard() {
+  const [copied, setCopied] = useSate(false);
+  const copy = async (text) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+  return { copied, copy };
+}
+```
+**Why it matters:** both APIs are async and can fail(permission denied, insecure context) - always handle the error, not just success.
