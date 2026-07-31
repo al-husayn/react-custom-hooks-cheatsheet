@@ -300,3 +300,6 @@ function useClipboard() {
 }
 ```
 **Why it matters:** both APIs are async and can fail(permission denied, insecure context) - always handle the error, not just success.
+
+### Save this for your next react project.
+9 hooks, 9 real world problems solved - the kind that show up in production apps and interviews as well.
