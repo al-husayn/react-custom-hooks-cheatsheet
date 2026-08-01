@@ -5,6 +5,6 @@ function useInterval(callback, delay) {
   useEffect(() => {
     if (delay == null) return;
     const id = setInterval(() => saved.current(), delay);
-    return clearInterval(id);
+    return () => clearInterval(id);
   }, [delay]);
 }
