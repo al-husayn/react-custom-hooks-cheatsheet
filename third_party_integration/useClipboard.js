@@ -1,6 +1,6 @@
 // useClipboard - copy text, show confirmation
 function useClipboard() {
-  const [copied, setCopied] = useSate(false);
+  const [copied, setCopied] = useState(false);
   const copy = async (text) => {
     await navigator.clipboard.writeText(text);
     setCopied(true);

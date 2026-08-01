@@ -17,7 +17,7 @@
 Anytime you call an API or load a long list, these two hooks cover almost every real case.
 
 ```js
-const { useState, useEffect } = require("react");
+const { useState, useEffect } = require('react');
 
 // useFetch - GET/POST + loading/error state
 function useFetch(url) {
@@ -34,7 +34,7 @@ function useFetch(url) {
 ```
 
 ```js
-const { useEffect } = require("react");
+const { useEffect } = require('react');
 
 // useInfiniteScroll - load more near bottom
 function useInfiniteScroll(callback) {
@@ -43,8 +43,8 @@ function useInfiniteScroll(callback) {
       const bottom = innerHeight + scrollY >= document.body.offsetHeight - 100;
       if (bottom) callback();
     };
-    addEventListener("scroll", onScroll);
-    return () => removeEventListener("scroll", onScroll);
+    addEventListener('scroll', onScroll);
+    return () => removeEventListener('scroll', onScroll);
   }, [callback]);
 }
 ```
@@ -74,7 +74,7 @@ function useForm(initial, validate) {
 
 ```js
 // useInput - single field state + onChange
-function useInput(initial = "") {
+function useInput(initial = '') {
   const [value, setValue] = useState(initial);
   const onChange = (e) => setValue(e.target.value);
   return { value, onChange };
@@ -93,7 +93,7 @@ function useWindowSize() {
   const [size, setSize] = useState([innerWidth, innerHeight]);
   useEffect(() => {
     const onResize = () => setSize([innerWidth, innerHeight]);
-    addEventListener("resize", onResize);
+    addEventListener('resize', onResize);
   }, []);
   return size;
 }
@@ -103,8 +103,8 @@ function useMediaQuery(q) {
   const [matches, setMatches] = useState(() => matchMedia(q).matches);
   useEffect(() => {
     const onChange = (e) => setMatches(e.matches);
-    matchMedia(q).addEventListener("change", onChange);
-    return () => matchMedia(q).removeEventListener("change", onChange);
+    matchMedia(q).addEventListener('change', onChange);
+    return () => matchMedia(q).removeEventListener('change', onChange);
   }, [q]);
   return matches;
 }
@@ -114,8 +114,8 @@ function useOnLineStatus() {
   const [online, setOnline] = useState(navigator.onLine);
   useEffect(() => {
     const sync = setOnline(navigator.onLine);
-    addEventListener("online", sync);
-    addEventListener("offline", sync);
+    addEventListener('online', sync);
+    addEventListener('offline', sync);
   }, []);
   return online;
 }
@@ -186,6 +186,7 @@ function useThrottle(callback, limit = 300) {
 **Why it matters:** debounce = wait until typing stops (search input); throttle = run at most once per N ms (scroll/resize).
 
 ## UI STATE MANAGEMENT
+
 Modals, dropdowns, accordions, and hover effects all reduce to the same three tiny patterns.
 
 ```js
@@ -212,22 +213,24 @@ function useHover() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    el.addEventListener("mouseenter", () => setHovered(true));
-    el.addEventListener("mouseleave", () => setHovered(false));
+    el.addEventListener('mouseenter', () => setHovered(true));
+    el.addEventListener('mouseleave', () => setHovered(false));
   }, []);
   return [ref, hovered];
 }
 ```
+
 **Why it matters:** useDisclosure beats useToggle for modals since it names both actions explicitly.
 
 ## AUTH & USER-RELATED
+
 Logged-in state and role checks should live in one hook, not scattered accross components.
 
 ```js
 // useAuth - read auth context (login/logout)
 function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth needs AuthProvider");
+  if (!ctx) throw new Error('useAuth needs AuthProvider');
   return ctx; // {user, login, logout }
 }
 
@@ -236,16 +239,17 @@ function usePermissions(required = []) {
   const { user } = useAuth();
   return useMemo(() => {
     if (!user) return false;
-    return required.every(p => user.permissions.include(p))
+    return required.every((p) => user.permissions.include(p));
   }, [user, required]);
 }
-
 ```
 
 **Why it matters:** usePermissions is memoized so role checks don't rerun on every render.
 
 ## TIMERS & INTERVALS
+
 Countdown timers and auto fresh features need one thing plain setInterval dosn't give you: always using the latest callback.
+
 ```js
 // useInterval - setInterval with fresh callback
 function useInterval(callback, delay) {
@@ -269,12 +273,14 @@ function useTimeout(callback, delay) {
   }, [delay]);
 }
 ```
+
 **Why it matters:** Storing the callback in a ref fixes the classic bug of setInterval calling a stale, outdated function.
 
 ## THIRD-PARTY INTEGRATION
+
 Location access and copy-to-clipboard both need the same shape: async browser API + status state.
 
-```js 
+```js
 // useGeolocation - user's current position.
 function useGeolocation() {
   const [pos, setPos] = useState(null);
@@ -282,7 +288,7 @@ function useGeolocation() {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (p) => setPos(p.coords),
-      (err) => setError(err.message)
+      (err) => setError(err.message),
     );
   }, []);
   return { pos, error };
@@ -290,7 +296,7 @@ function useGeolocation() {
 
 // useClipboard - copy text, show confirmation
 function useClipboard() {
-  const [copied, setCopied] = useSate(false);
+  const [copied, setCopied] = useState(false);
   const copy = async (text) => {
     await navigator.clipboard.writeText(text);
     setCopied(true);
@@ -299,7 +305,9 @@ function useClipboard() {
   return { copied, copy };
 }
 ```
+
 **Why it matters:** both APIs are async and can fail(permission denied, insecure context) - always handle the error, not just success.
 
 ### Save this for your next react project.
+
 9 hooks, 9 real world problems solved - the kind that show up in production apps and interviews as well.
