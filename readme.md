@@ -93,7 +93,8 @@ function useWindowSize() {
   const [size, setSize] = useState([innerWidth, innerHeight]);
   useEffect(() => {
     const onResize = () => setSize([innerWidth, innerHeight]);
-    addEventListener('resize', onResize);
+    addEventListener("resize", onResize);
+    return () => removeEventListener("resize", onResize);
   }, []);
   return size;
 }
@@ -109,13 +110,17 @@ function useMediaQuery(q) {
   return matches;
 }
 
-// useOnLineStatus -  detect connection drops
-function useOnLineStatus() {
+// useOnlineStatus - detect connection drops
+function useOnlineStatus() {
   const [online, setOnline] = useState(navigator.onLine);
   useEffect(() => {
-    const sync = setOnline(navigator.onLine);
-    addEventListener('online', sync);
-    addEventListener('offline', sync);
+    const sync = () => setOnline(navigator.onLine);
+    addEventListener("online", sync);
+    addEventListener("offline", sync);
+    return () => {
+      removeEventListener("online", sync);
+      removeEventListener("offline", sync);
+    };
   }, []);
   return online;
 }
@@ -128,9 +133,10 @@ function useOnLineStatus() {
 Theme, auth tokens and temporary form data - persisted the right way, without SSR crashes.
 
 ```js
-// useLocalStorage - persists accross sessions
+// useLocalStorage - persists across sessions
 function useLocalStorage(key, initial) {
   const [value, setValue] = useState(() => {
+    if(typeof window === "undefined") return initial;
     const saved = localStorage.getItem(key);
     return saved ? JSON.parse(saved) : initial;
   });
@@ -139,6 +145,7 @@ function useLocalStorage(key, initial) {
   }, [key, value]);
   return [value, setValue];
 }
+
 
 //  useSessionStorage - cleared when tabs closes
 function useSessionStorage(key, initial) {
@@ -213,11 +220,18 @@ function useHover() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    el.addEventListener('mouseenter', () => setHovered(true));
-    el.addEventListener('mouseleave', () => setHovered(false));
+    const onEnter = () => setHovered(true);
+    const onLeave = () => setHovered(false);
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+    };
   }, []);
   return [ref, hovered];
 }
+
 ```
 
 **Why it matters:** useDisclosure beats useToggle for modals since it names both actions explicitly.
@@ -239,7 +253,7 @@ function usePermissions(required = []) {
   const { user } = useAuth();
   return useMemo(() => {
     if (!user) return false;
-    return required.every((p) => user.permissions.include(p));
+    return required.every((p) => user.permissions.includes(p));
   }, [user, required]);
 }
 ```
@@ -258,16 +272,17 @@ function useInterval(callback, delay) {
   useEffect(() => {
     if (delay == null) return;
     const id = setInterval(() => saved.current(), delay);
-    return clearInterval(id);
+    return () => clearInterval(id);
   }, [delay]);
 }
+
 
 // useTimeout - setTimeout with auto cleanup
 function useTimeout(callback, delay) {
   const saved = useRef(callback);
   saved.current = callback;
   useEffect(() => {
-    if ((delay = null)) return;
+    if ((delay == null)) return;
     const id = setTimeout(() => saved.current(), delay);
     return () => clearTimeout(id);
   }, [delay]);
